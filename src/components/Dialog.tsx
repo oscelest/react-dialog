@@ -1,5 +1,6 @@
 import {DialogInstance, registerDialog, deregisterDialog} from "../hooks/useDialog";
 import React, {useState, useRef, useEffect} from "react";
+import "./Dialog.css";
 
 function Dialog(props: DialogProps) {
   const [click, setClick] = useState<boolean>();
