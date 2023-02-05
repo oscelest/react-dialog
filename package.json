@@ -15,6 +15,9 @@
     "access": "public"
   },
   "main": "dist/cjs/index.js",
+  "types": "dist/types/index.d.ts",
+  "module": "dist/esm/index.js",
+  "umd": "dist/umd/index.js",
   "files": [
     "dist"
   ],
