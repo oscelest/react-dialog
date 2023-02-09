@@ -1,23 +1,25 @@
-import {v4} from "uuid";
 import React from "react";
-import DialogQueueType from "../enums/DialogQueueType";
+import {v4} from "uuid";
+import {DialogQueueType} from "../enums";
 
 const collection = {} as DialogCollection;
 
-function useDialog(namespace: string, config: DialogConfig): DialogCloseFn
-function useDialog(namespace: string, queue: DialogQueueType, config: DialogConfig): DialogCloseFn
-function useDialog(namespace: string, _queue: DialogQueueType | DialogConfig, _config?: DialogConfig): DialogCloseFn {
+export function useDialog(namespace: string, config: DialogConfig): DialogCloseFn
+export function useDialog(namespace: string, queue: DialogQueueType, config: DialogConfig): DialogCloseFn
+export function useDialog(namespace: string, _queue: DialogQueueType | DialogConfig, _config?: DialogConfig): DialogCloseFn {
   const {instance_list} = getNamespace(namespace);
   const queue = !_config ? DialogQueueType.FIRST : _queue;
   const config = !_config ? _queue as DialogConfig : _config;
-
+  
   const closeDialog = () => {
-    for (let i = 0; i < instance_list.length; i++) {
-      if (instance_list.at(i)?.config === config) instance_list.splice(i, 1);
+    for (let i = instance_list.length; i >= 0; i--) {
+      if (instance_list.at(i)?.config === config) {
+        instance_list.splice(i, 1);
+      }
     }
     updateListenerCollection(namespace);
   };
-
+  
   const instance: DialogInstance = {namespace, config, closeDialog};
   switch (queue) {
     case DialogQueueType.FIRST:
@@ -32,17 +34,15 @@ function useDialog(namespace: string, _queue: DialogQueueType | DialogConfig, _c
     default:
       throw new Error(`Unknown dialog queue type '${queue}' used.`);
   }
-
+  
   updateListenerCollection(namespace);
   return closeDialog;
 }
 
 function updateListenerCollection(namespace: string) {
   const {callback_collection, instance_list} = getNamespace(namespace);
-  const list = Object.values(callback_collection);
-  for (let i = 0; i < list.length; i++) {
-    const item = list.at(i);
-    if (item) item(instance_list.at(0));
+  for (let callback of Object.values(callback_collection)) {
+    callback(instance_list.at(0));
   }
 }
 
@@ -77,7 +77,7 @@ interface DialogNamespace {
 export interface DialogInstance {
   namespace: string;
   config: DialogConfig;
-
+  
   closeDialog(): void;
 }
 

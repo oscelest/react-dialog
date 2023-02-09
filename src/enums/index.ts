@@ -1,1 +1,1 @@
-export {default as DialogQueueType} from "./DialogQueueType";
+export * from "./DialogQueueType";
