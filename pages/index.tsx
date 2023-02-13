@@ -25,7 +25,6 @@ function IndexPage() {
     createDialogTest({id: "6"});
     createDialogGlobal2({id: "7"});
     createDialogGlobal2({id: "8"});
-    // dialog.setPosition(3);
   }
 }
 

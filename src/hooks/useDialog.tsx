@@ -11,6 +11,8 @@ export function useDialog(namespace: string = Dialog.default_namespace): UseDial
   const [dialog, setDialog] = useState<DialogType>();
   useEffect(() => setDialog(collection[namespace].at(0)), [collection[namespace]]);
   
+  console.log(collection)
+  
   return [getDialog(dialog), createDialog];
   
   function createDialog(props: DialogInstanceProps = {}) {
@@ -26,8 +28,12 @@ export function useDialog(namespace: string = Dialog.default_namespace): UseDial
     setDialog(collection[namespace].at(0));
   }
   
-  function onSetPosition(dialog: DialogType, index: number | DialogIndexFn) {
-  
+  function onSetPosition(dialog: DialogType, position: number | DialogIndexFn) {
+    const list = [...collection[namespace]].filter(item => item && item !== dialog);
+    const index = typeof position === "function" ? position(list) : position;
+    list.splice(index, 0, dialog);
+    collection[namespace] = list;
+    setDialog(collection[namespace].at(0));
   }
 }
 
