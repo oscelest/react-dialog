@@ -1,91 +1,54 @@
-import React from "react";
-import {v4} from "uuid";
-import {DialogQueueType} from "../enums";
+import {createContext, useEffect, useState} from "react";
+import {Dialog} from "../classes/Dialog";
+import {DialogInstance, DialogInstanceProps} from "../components/DialogInstance";
 
-const collection = {} as DialogCollection;
+export const collection: DialogCollection = {};
 
-export function useDialog(namespace: string, config: DialogConfig): DialogCloseFn
-export function useDialog(namespace: string, queue: DialogQueueType, config: DialogConfig): DialogCloseFn
-export function useDialog(namespace: string, _queue: DialogQueueType | DialogConfig, _config?: DialogConfig): DialogCloseFn {
-  const {instance_list} = getNamespace(namespace);
-  const queue = !_config ? DialogQueueType.FIRST : _queue;
-  const config = !_config ? _queue as DialogConfig : _config;
+export const DialogContext = createContext<DialogType>({} as DialogType);
+
+export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
+  if (!collection[namespace]) collection[namespace] = [];
+  const [dialog, setDialog] = useState<DialogType>();
+  useEffect(() => setDialog(collection[namespace].at(0)), [collection[namespace]]);
   
-  const closeDialog = () => {
-    for (let i = instance_list.length; i >= 0; i--) {
-      if (instance_list.at(i)?.config === config) {
-        instance_list.splice(i, 1);
-      }
-    }
-    updateListenerCollection(namespace);
-  };
+  return [getDialog(dialog), createDialog];
   
-  const instance: DialogInstance = {namespace, config, closeDialog};
-  switch (queue) {
-    case DialogQueueType.FIRST:
-      instance_list.unshift(instance);
-      break;
-    case DialogQueueType.NEXT:
-      instance_list.splice(1, 0, instance);
-      break;
-    case DialogQueueType.LAST:
-      instance_list.push(instance);
-      break;
-    default:
-      throw new Error(`Unknown dialog queue type '${queue}' used.`);
+  function createDialog(props: DialogInstanceProps = {}) {
+    const dialog = new Dialog({props: {...props}, onClose, onSetPosition});
+    collection[namespace] = [...collection[namespace], dialog].filter(item => item);
+    setDialog(collection[namespace].at(0));
+    
+    return dialog;
   }
   
-  updateListenerCollection(namespace);
-  return closeDialog;
-}
-
-function updateListenerCollection(namespace: string) {
-  const {callback_collection, instance_list} = getNamespace(namespace);
-  for (let callback of Object.values(callback_collection)) {
-    callback(instance_list.at(0));
+  function onClose(dialog: DialogType) {
+    collection[namespace] = [...collection[namespace]].filter(item => item && item !== dialog);
+    setDialog(collection[namespace].at(0));
+  }
+  
+  function onSetPosition(dialog: DialogType, index: number | DialogIndexFn) {
+  
   }
 }
 
-export function registerDialog(namespace: string, callback: DialogUpdateCallbackFn) {
-  const uuid = v4();
-  const {instance_list, callback_collection} = getNamespace(namespace);
-  callback_collection[uuid] = callback;
-  callback(instance_list.at(0));
-  return uuid;
-}
-
-export function deregisterDialog(namespace: string, uuid: string) {
-  delete getNamespace(namespace).callback_collection[uuid];
-}
-
-function getNamespace(namespace: string) {
-  return collection[namespace] ?? (collection[namespace] = {instance_list: [], callback_collection: {}});
-}
-
-export type DialogCloseFn = () => void;
-export type DialogUpdateCallbackFn = (instance?: DialogInstance) => void
-
-interface DialogCollection {
-  [namespace: string]: DialogNamespace;
-}
-
-interface DialogNamespace {
-  instance_list: DialogInstance[];
-  callback_collection: {[uuid: string]: DialogUpdateCallbackFn};
-}
-
-export interface DialogInstance {
-  namespace: string;
-  config: DialogConfig;
+function getDialog(instance?: DialogType) {
+  if (!instance) return null;
   
-  closeDialog(): void;
+  return (
+    <DialogContext.Provider value={instance}>
+      <DialogInstance {...instance.props}></DialogInstance>
+    </DialogContext.Provider>
+  );
 }
 
-export interface DialogConfig {
-  dismissible?: boolean;
-  closeable?: boolean;
-  component: JSX.Element;
-  props?: React.HTMLProps<HTMLDivElement>;
-}
+export type UseDialogHook = [null | JSX.Element, DialogCreateFn];
 
-export default useDialog;
+export type DialogCreateFn = (props?: DialogInstanceProps) => Dialog;
+export type DialogIndexFn = (list: readonly Dialog[]) => number
+
+export type DialogType = Dialog
+export type DialogList = DialogType[]
+
+export interface DialogCollection {
+  [namespace: string]: DialogList;
+}

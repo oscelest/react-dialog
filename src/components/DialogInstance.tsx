@@ -1,32 +1,37 @@
-import React, {createContext, DetailedHTMLProps, HTMLAttributes, useState} from "react";
-import {v4} from "uuid";
-import Style from "./DialogInstance.module.css"
+import React, {DetailedHTMLProps, HTMLAttributes, useContext} from "react";
+import {DialogContext} from "../hooks/useDialog";
+import Style from "./DialogInstance.module.css";
 
-const DialogInstanceContext = createContext({});
 
 export function DialogInstance(props: DialogInstanceProps) {
-  const {className, closeable, dismissible, children, ...component_method_props} = props;
-  const {...component_props} = component_method_props;
+  const {className, dismissible, children, ...component_method_props} = props;
+  const {onMouseDown, onMouseUp, ...component_props} = component_method_props;
   
-  const [id] = useState<string>(v4());
+  const context = useContext(DialogContext);
+  // const [dismiss, setDismiss] = useState<boolean>(false);
   
   const classes = [Style.Component];
   if (className) classes.push(className);
   
   return (
-    <DialogInstanceContext.Provider value={props}>
+    <>
+      <div className={Style.Overlay} onClick={onOverlayClick}></div>
       <div {...component_props} className={classes.join(" ")}>
         {children}
       </div>
-    </DialogInstanceContext.Provider>
+    </>
   );
+  
+  function onOverlayClick(event: React.MouseEvent<HTMLDivElement>) {
+    if (event.defaultPrevented) return;
+    context.close();
+  }
 }
 
 type HTMLComponentProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
-
 export interface DialogInstanceProps extends HTMLComponentProps {
-  closeable?: boolean;
-  dismissible?: boolean;
+  readonly namespace?: string;
+  readonly closeable?: boolean;
+  readonly dismissible?: boolean;
 }
-
