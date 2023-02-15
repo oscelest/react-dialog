@@ -1,17 +1,14 @@
 import {createContext, useEffect, useState} from "react";
-import {Dialog} from "../classes/Dialog";
-import {DialogInstance, DialogInstanceProps} from "../components/DialogInstance";
+import {Dialog} from "../classes";
+import {DialogInstance, DialogInstanceProps} from "../components";
 
-export const collection: DialogCollection = {};
-
+const collection: DialogCollection = {};
 export const DialogContext = createContext<DialogType>({} as DialogType);
 
 export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
   if (!collection[namespace]) collection[namespace] = [];
   const [dialog, setDialog] = useState<DialogType>();
   useEffect(() => setDialog(collection[namespace].at(0)), [collection[namespace]]);
-  
-  console.log(collection)
   
   return [getDialog(dialog), createDialog];
   

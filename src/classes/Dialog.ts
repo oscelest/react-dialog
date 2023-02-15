@@ -1,6 +1,6 @@
 import {v4} from "uuid";
-import {DialogInstanceProps} from "../components/DialogInstance";
-import {DialogIndexFn} from "../hooks/useDialog";
+import {DialogInstanceProps} from "../components";
+import {DialogIndexFn} from "../hooks";
 
 export class Dialog {
   
@@ -21,6 +21,7 @@ export class Dialog {
   
   public close() {
     this.onClose(this);
+    this.props.onClose?.(this);
   }
   
   public setPosition(index: number | DialogIndexFn) {
