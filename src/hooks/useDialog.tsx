@@ -1,13 +1,13 @@
-import {createContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Dialog} from "../classes";
 import {DialogInstance, DialogInstanceProps} from "../components";
+import {DialogContext} from "../index";
 
 const collection: DialogCollection = {};
-export const DialogContext = createContext<DialogType>({} as DialogType);
 
 export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
   if (!collection[namespace]) collection[namespace] = [];
-  const [dialog, setDialog] = useState<DialogType>();
+  const [dialog, setDialog] = useState<Dialog>();
   useEffect(() => setDialog(collection[namespace].at(0)), [collection[namespace]]);
   
   return [getDialog(dialog), createDialog];
@@ -20,12 +20,12 @@ export function useDialog(namespace: string = Dialog.default_namespace): UseDial
     return dialog;
   }
   
-  function onClose(dialog: DialogType) {
+  function onClose(dialog: Dialog) {
     collection[namespace] = [...collection[namespace]].filter(item => item && item !== dialog);
     setDialog(collection[namespace].at(0));
   }
   
-  function onSetPosition(dialog: DialogType, position: number | DialogIndexFn) {
+  function onSetPosition(dialog: Dialog, position: number | DialogIndexFn) {
     const list = [...collection[namespace]].filter(item => item && item !== dialog);
     const index = typeof position === "function" ? position(list) : position;
     list.splice(index, 0, dialog);
@@ -34,7 +34,7 @@ export function useDialog(namespace: string = Dialog.default_namespace): UseDial
   }
 }
 
-function getDialog(instance?: DialogType) {
+function getDialog(instance?: Dialog) {
   if (!instance) return null;
   
   return (
@@ -49,8 +49,7 @@ export type UseDialogHook = [null | JSX.Element, DialogCreateFn];
 export type DialogCreateFn = (props?: DialogInstanceProps) => Dialog;
 export type DialogIndexFn = (list: readonly Dialog[]) => number
 
-export type DialogType = Dialog
-export type DialogList = DialogType[]
+export type DialogList = Dialog[]
 
 export interface DialogCollection {
   [namespace: string]: DialogList;

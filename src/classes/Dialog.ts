@@ -4,12 +4,10 @@ import {DialogIndexFn} from "../hooks";
 
 export class Dialog {
   
-  public readonly props: DialogInstanceProps;
-  
-  private readonly onClose: onCloseHandler<this>
-  private readonly onSetPosition: onSetPositionHandler<this>
-  
   public static readonly default_namespace: string = "global";
+  public readonly props: DialogInstanceProps;
+  private readonly onClose: onCloseHandler<this>;
+  private readonly onSetPosition: onSetPositionHandler<this>;
   
   constructor(initializer: DialogInitializer<Dialog>) {
     this.props = {...initializer.props};
