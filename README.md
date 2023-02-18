@@ -1,4 +1,4 @@
-# react-collapsible
+# react-dialog
 
 ## Introduction
 
