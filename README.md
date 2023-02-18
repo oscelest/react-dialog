@@ -68,12 +68,6 @@ The `dialog` renderer supplied by the hook will display only dialogs from that n
 The `DialogInstance` component inherits all HTMLDivElement properties and applies them directly to the outermost element.
 This includes the className property for those using CSS modules.
 
-readonly ?: boolean;
-readonly closeable?: boolean;
-readonly dismissible?: boolean;
-
-onClose?(dialog: Dialog): void;
-
 ### overlay: boolean
 
 Determines if an overlay should be shown behind the dialog, disabling clicking on anything behind the dialog.
