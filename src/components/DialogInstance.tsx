@@ -6,7 +6,7 @@ import Style from "./DialogInstance.module.css";
 
 export function DialogInstance(props: DialogInstanceProps) {
   const {className, overlay, closeable, dismissible, children, ...component_method_props} = props;
-  const {onMouseDown, onMouseUp, ...component_props} = component_method_props;
+  const {...component_props} = component_method_props;
   
   const context = useContext(DialogContext);
   
