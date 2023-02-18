@@ -1,0 +1,53 @@
+.Component {
+  width:            500px;
+  height:           200px;
+  position:         absolute;
+  inset:            0;
+  top:              50%;
+  left:             50%;
+  z-index:          100;
+  transform:        translate(-50%, -50%);
+  background-color: white;
+  border:           2px solid rgba(0, 0, 0, 0.4);
+  border-radius:    4px;
+}
+
+.Overlay {
+  position:         fixed;
+  inset:            0;
+  z-index:          100;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.Component :global(.dialog-close-button) {
+  width:            20px;
+  height:           20px;
+  position:         absolute;
+  top:              5px;
+  right:            5px;
+  padding:          0;
+  background-color: transparent;
+  border:           none;
+  border-radius:    0;
+}
+
+.Component :global(.dialog-close-button svg) {
+  opacity:        0.2;
+  transition:     opacity 200ms ease-in-out;
+  stroke-linecap: round;
+  stroke:         #000000;
+  stroke-width:   20;
+}
+
+.Component :global(.dialog-close-button[data-hover="true"][data-disabled="false"]::before),
+.Component :global(.dialog-close-button[data-hover="true"][data-active="true"][data-disabled="false"]::before) {
+  background: transparent;
+}
+
+.Component :global(.dialog-close-button[data-hover="true"][data-disabled="false"] svg) {
+  opacity: 0.4;
+}
+
+.Component :global(.dialog-close-button[data-hover="true"][data-active="true"][data-disabled="false"] svg) {
+  opacity: 0.6;
+}
