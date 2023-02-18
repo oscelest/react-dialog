@@ -1,27 +1,27 @@
 {
-  "name":             "@noxy/react-dialog",
-  "author":           "oscelest",
-  "version":          "0.1.4",
-  "description":      "A dialog component and hook to use with react functional components.",
-  "license":          "MIT",
-  "repository":       {
+  "name":            "@noxy/react-dialog",
+  "author":          "oscelest",
+  "version":         "1.0.2",
+  "description":     "A dialog component and hook to use with react functional components.",
+  "license":         "MIT",
+  "repository":      {
     "type": "git",
     "url":  "git@github.com:oscelest/react-dialog.git"
   },
-  "bugs":             {
+  "bugs":            {
     "url": "https://github.com/oscelest/react-dialog/issues"
   },
-  "publishConfig":    {
+  "publishConfig":   {
     "access": "public"
   },
-  "main":             "dist/cjs/index.js",
-  "types":            "dist/types/index.d.ts",
-  "module":           "dist/esm/index.js",
-  "umd":              "dist/umd/index.js",
-  "files":            [
+  "main":            "dist/cjs/index.js",
+  "types":           "dist/types/index.d.ts",
+  "module":          "dist/esm/index.js",
+  "umd":             "dist/umd/index.js",
+  "files":           [
     "dist"
   ],
-  "scripts":          {
+  "scripts":         {
     "update":   "npx npm-check-updates -u && npm i",
     "build":    "rollup -c",
     "test:app": "next dev"
