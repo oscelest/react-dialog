@@ -93,7 +93,3 @@ Determines if a close button should be shown inside the dialog that can be click
 A callback function which is called when the dialog is dismissed or closed, either through the close button, the overlay, or the Dialog close method.
 
 **Default value**: `undefined`
-
-## Notice
-
-This is currently not in a v1.0.0 release. Undocumented breaking changes might happen between versions.
