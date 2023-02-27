@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Dialog} from "../classes";
 import {DialogInstance, DialogInstanceProps} from "../components";
 import {DialogContext} from "../index";
