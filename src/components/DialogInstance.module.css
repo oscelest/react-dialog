@@ -6,10 +6,10 @@
   top:              50%;
   left:             50%;
   z-index:          100;
-  transform:        translate(-50%, -50%);
-  background-color: white;
   border:           2px solid rgba(0, 0, 0, 0.4);
   border-radius:    4px;
+  background-color: white;
+  transform:        translate(-50%, -50%);
 }
 
 .Overlay {
@@ -26,9 +26,9 @@
   top:              5px;
   right:            5px;
   padding:          0;
-  background-color: transparent;
   border:           none;
   border-radius:    0;
+  background-color: transparent;
 }
 
 .Component :global(.dialog-close-button svg) {
