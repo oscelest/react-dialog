@@ -5,10 +5,14 @@ import {DialogContext} from "../index";
 
 const collection: DialogCollection = {};
 
-export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
+export function useDialog(namespace: string = Dialog.default_namespace, test: string = ""): UseDialogHook {
   if (!collection[namespace]) collection[namespace] = [];
   const [dialog, setDialog] = useState<Dialog>();
-  useEffect(() => setDialog(collection[namespace].at(0)), [collection[namespace]]);
+  
+  useEffect(() => {
+    console.log("updating now", test);
+    setDialog(collection[namespace].at(0));
+  }, [collection[namespace].at(0)]);
   
   return [getDialog(dialog), createDialog];
   
