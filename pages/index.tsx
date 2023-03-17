@@ -3,7 +3,7 @@ import {useDialog} from "../src";
 import Style from "./index.module.css";
 
 function IndexPage() {
-  const [, createDialogGlobal] = useDialog("global", "index");
+  const [, createDialogGlobal] = useDialog("global");
   
   return (
     <div className={Style.Component}>

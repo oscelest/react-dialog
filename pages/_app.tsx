@@ -3,8 +3,7 @@ import React from "react";
 import {useDialog} from "../src";
 
 function Application({Component, pageProps}: AppProps) {
-  const [dialog] = useDialog("global", "_app");
-  console.log("Dialog is:", dialog);
+  const [dialog] = useDialog("global");
   
   return (
     <>

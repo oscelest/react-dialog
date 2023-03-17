@@ -1,40 +1,31 @@
-import React, {useEffect, useState} from "react";
+import {createSubscription, Subscription, useSubscription} from "@noxy/react-subscription-hook";
+import React from "react";
 import {Dialog} from "../classes";
 import {DialogInstance, DialogInstanceProps} from "../components";
 import {DialogContext} from "../index";
 
 const collection: DialogCollection = {};
 
-export function useDialog(namespace: string = Dialog.default_namespace, test: string = ""): UseDialogHook {
-  if (!collection[namespace]) collection[namespace] = [];
-  const [dialog, setDialog] = useState<Dialog>();
-  
-  useEffect(() => {
-    console.log("updating now", test);
-    setDialog(collection[namespace].at(0));
-  }, [collection[namespace].at(0)]);
-  
-  return [getDialog(dialog), createDialog];
+export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
+  if (!collection[namespace]) collection[namespace] = createSubscription<DialogList>([]);
+  const [dialog_list, setDialogList] = useSubscription(collection[namespace]);
+  return [getDialog(dialog_list.at(0)), createDialog];
   
   function createDialog(props: DialogInstanceProps = {}) {
     const dialog = new Dialog({props: {...props}, onClose, onSetPosition});
-    collection[namespace] = [...collection[namespace], dialog].filter(item => item);
-    setDialog(collection[namespace].at(0));
-    
+    setDialogList([...dialog_list, dialog].filter(item => item));
     return dialog;
   }
   
   function onClose(dialog: Dialog) {
-    collection[namespace] = [...collection[namespace]].filter(item => item && item !== dialog);
-    setDialog(collection[namespace].at(0));
+    setDialogList([...dialog_list].filter(item => item && item !== dialog));
   }
   
   function onSetPosition(dialog: Dialog, position: number | DialogIndexFn) {
-    const list = [...collection[namespace]].filter(item => item && item !== dialog);
+    const list = [...dialog_list].filter(item => item && item !== dialog);
     const index = typeof position === "function" ? position(list) : position;
     list.splice(index, 0, dialog);
-    collection[namespace] = list;
-    setDialog(collection[namespace].at(0));
+    setDialogList(list);
   }
 }
 
@@ -56,5 +47,5 @@ export type DialogIndexFn = (list: readonly Dialog[]) => number
 export type DialogList = Dialog[]
 
 export interface DialogCollection {
-  [namespace: string]: DialogList;
+  [namespace: string]: Subscription<DialogList>;
 }
