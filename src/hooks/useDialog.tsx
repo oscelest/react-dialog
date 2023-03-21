@@ -1,17 +1,17 @@
 import {createSubscription, Subscription, useSubscription} from "@noxy/react-subscription-hook";
 import React from "react";
 import {Dialog} from "../classes";
-import {DialogInstance, DialogInstanceProps} from "../components";
-import {DialogContext} from "../index";
+import {DialogInstance} from "../components";
+import {DialogContext, DialogIndexFn, DialogProps, UseDialogHook} from "../index";
 
-const collection: DialogCollection = {};
+const collection: {[namespace: string]: Subscription<Dialog[]>} = {};
 
 export function useDialog(namespace: string = Dialog.default_namespace): UseDialogHook {
-  if (!collection[namespace]) collection[namespace] = createSubscription<DialogList>([]);
+  if (!collection[namespace]) collection[namespace] = createSubscription<Dialog[]>([]);
   const [dialog_list, setDialogList] = useSubscription(collection[namespace]);
   return [getDialog(dialog_list.at(0)), createDialog];
   
-  function createDialog(props: DialogInstanceProps = {}) {
+  function createDialog(props: DialogProps = {}) {
     const dialog = new Dialog({props: {...props}, onClose, onSetPosition});
     setDialogList([...dialog_list, dialog].filter(item => item));
     return dialog;
@@ -29,23 +29,12 @@ export function useDialog(namespace: string = Dialog.default_namespace): UseDial
   }
 }
 
-function getDialog(instance?: Dialog) {
+function getDialog(instance: Dialog | undefined) {
   if (!instance) return null;
   
   return (
     <DialogContext.Provider value={instance}>
-      <DialogInstance {...instance.props}></DialogInstance>
+      <DialogInstance {...instance.props}/>
     </DialogContext.Provider>
   );
-}
-
-export type UseDialogHook = [null | JSX.Element, DialogCreateFn];
-
-export type DialogCreateFn = (props?: DialogInstanceProps) => Dialog;
-export type DialogIndexFn = (list: readonly Dialog[]) => number
-
-export type DialogList = Dialog[]
-
-export interface DialogCollection {
-  [namespace: string]: Subscription<DialogList>;
 }
