@@ -38,12 +38,16 @@ function TestComponent(props: HTMLProps<HTMLDivElement>) {
   
   function onButtonClick() {
     createDialog({
-      children: <DialogComponent/>
+      children: <DialogComponent onClose={onDialogClose}/>
     });
+  }
+  
+  function onDialogClose(value: string) {
+  
   }
 }
 
-function DialogComponent() {
+function DialogComponent(props: {onClose: (value: string) => void}) {
   const dialog = useContext(DialogContext)
   
   return (
@@ -54,7 +58,7 @@ function DialogComponent() {
   )
   
   function onButtonClick() {
-    dialog.close();
+    dialog.close("a value");
   }
 }
 
@@ -88,8 +92,15 @@ Determines if a close button should be shown inside the dialog that can be click
 
 **Default value**: `true`
 
-### onClose: callback(dialog: Dialog): void
+### onClose: callback(dialog: DialogEvent): void
 
 A callback function which is called when the dialog is dismissed or closed, either through the close button, the overlay, or the Dialog close method.
+
+```
+interface DialogEvent<V> {
+    value: V
+    dialog: Dialog
+}
+```
 
 **Default value**: `undefined`

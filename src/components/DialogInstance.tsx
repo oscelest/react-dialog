@@ -7,7 +7,7 @@ import Style from "./DialogInstance.module.css";
 export function DialogInstance(props: DialogProps) {
   const {className, overlay, closeable, dismissible, children, ...component_method_props} = props;
   const {...component_props} = component_method_props;
-  const classes = sanitizeClassName(Style.Component, "dialog");
+  const classes = sanitizeClassName(Style.Component, "dialog", className);
   const context = useContext(DialogContext);
   
   return (
@@ -32,11 +32,11 @@ export function DialogInstance(props: DialogProps) {
   
   function renderOverlay() {
     if (overlay === false) return null;
-    
-    const classes = [Style.Overlay, "dialog-overlay"];
-    
+  
+    const classes = sanitizeClassName(Style.Overlay, "dialog-overlay");
+  
     return (
-      <div className={classes.join(" ")} onClick={onOverlayClick}/>
+      <div className={classes} onClick={onOverlayClick}/>
     );
   }
   
