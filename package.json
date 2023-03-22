@@ -1,7 +1,7 @@
 {
   "name": "@noxy/react-dialog",
   "author": "oscelest",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A dialog component and hook to use with react functional components.",
   "license": "MIT",
   "repository": {
