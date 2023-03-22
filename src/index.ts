@@ -1,6 +1,11 @@
 import {HTMLComponentProps} from "@noxy/react-utils";
 import {createContext} from "react";
-import {Dialog} from "./classes";
+
+export interface Dialog<ReturnValue = any> {
+  readonly props: DialogProps<ReturnValue>;
+  close(value?: ReturnValue): void;
+  setPosition(index: number | DialogIndexFn): void;
+}
 
 export interface DialogEvent<ReturnValue = any> {
   dialog: Dialog;

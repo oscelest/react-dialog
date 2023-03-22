@@ -2,9 +2,9 @@ import {Button} from "@noxy/react-button";
 import {sanitizeClassName} from "@noxy/react-utils";
 import React, {useContext} from "react";
 import {DialogContext, DialogProps} from "../index";
-import Style from "./DialogInstance.module.css";
+import Style from "./DialogComponent.module.css";
 
-export function DialogInstance(props: DialogProps) {
+export function DialogComponent(props: DialogProps) {
   const {className, overlay, closeable, dismissible, children, ...component_method_props} = props;
   const {...component_props} = component_method_props;
   const classes = sanitizeClassName(Style.Component, "dialog", className);

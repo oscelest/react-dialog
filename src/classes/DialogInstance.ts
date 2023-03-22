@@ -1,7 +1,7 @@
 import {v4} from "uuid";
-import {DialogIndexFn, DialogProps, onCloseHandler, onSetPositionHandler} from "../index";
+import {Dialog, DialogIndexFn, DialogProps, onCloseHandler, onSetPositionHandler} from "../index";
 
-export class Dialog<ReturnValue = any> {
+export class DialogInstance<ReturnValue = any> implements Dialog<ReturnValue> {
   
   public static readonly default_namespace: string = "global";
   public readonly props: DialogProps<ReturnValue>;
@@ -26,7 +26,7 @@ export class Dialog<ReturnValue = any> {
   }
 }
 
-export interface DialogInitializer<ReturnValue> {
+interface DialogInitializer<ReturnValue> {
   props: DialogProps<ReturnValue>;
   onClose: onCloseHandler;
   onSetPosition: onSetPositionHandler;

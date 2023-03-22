@@ -1,1 +1,1 @@
-export * from "./DialogInstance";
+export * from "./DialogComponent";
