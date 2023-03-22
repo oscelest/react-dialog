@@ -1,7 +1,7 @@
 {
   "name": "@noxy/react-dialog",
   "author": "oscelest",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A dialog component and hook to use with react functional components.",
   "license": "MIT",
   "repository": {
@@ -27,9 +27,9 @@
     "test:app": "next dev"
   },
   "dependencies": {
-    "uuid":                          "^9.0.0",
-    "@noxy/react-button":            "^1.0.3",
-    "@noxy/react-utils":             "^0.1.5",
+    "uuid": "^9.0.0",
+    "@noxy/react-button": "^1.0.3",
+    "@noxy/react-utils": "^0.1.5",
     "@noxy/react-subscription-hook": "^1.0.0"
   },
   "devDependencies": {
