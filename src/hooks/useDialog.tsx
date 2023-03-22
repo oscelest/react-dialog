@@ -6,12 +6,12 @@ import {Dialog, DialogContext, DialogIndexFn, DialogProps, UseDialogHook} from "
 
 const collection: {[namespace: string]: Subscription<Dialog[]>} = {};
 
-export function useDialog(namespace: string = DialogInstance.default_namespace): UseDialogHook {
+export function useDialog<ReturnValue>(namespace: string = DialogInstance.default_namespace): UseDialogHook<ReturnValue> {
   if (!collection[namespace]) collection[namespace] = createSubscription<Dialog[]>([]);
   const [dialog_list, setDialogList] = useSubscription(collection[namespace]);
   return [getDialog(dialog_list.at(0)), createDialog];
   
-  function createDialog(props: DialogProps = {}) {
+  function createDialog(props: DialogProps<ReturnValue> = {}) {
     const dialog = new DialogInstance({props: {...props}, onClose, onSetPosition});
     setDialogList([...dialog_list, dialog].filter(item => item));
     return dialog;
